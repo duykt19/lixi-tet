@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Lì Xì Tết Pro</title>
+<title>Lì Xì Tết Pro 2026</title>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
@@ -10,63 +10,65 @@
 body{
     margin:0;
     font-family: Arial, sans-serif;
-    text-align:center;
     background: radial-gradient(circle,#b30000,#660000);
     color:white;
-    overflow:hidden;
+    text-align:center;
 }
 
 .banner{
-    font-size:34px;
+    font-size:32px;
     font-weight:bold;
     margin-top:20px;
-    text-shadow:0 0 15px yellow;
+    text-shadow:0 0 15px gold;
 }
 
 .step{ margin-top:25px; }
 
+.amount-buttons button{
+    margin:6px;
+    padding:10px 16px;
+    border:none;
+    border-radius:8px;
+    background:gold;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.amount-buttons button.active{
+    background:orange;
+}
+
 input{
     padding:10px;
-    font-size:16px;
     border-radius:8px;
     border:none;
-    width:280px;
+    width:200px;
     text-align:center;
 }
 
-.quick-buttons button{
-    margin:6px;
-    padding:8px 14px;
-    border:none;
-    border-radius:8px;
-    background:gold;
-    font-weight:bold;
-    cursor:pointer;
-}
-
 button{
-    padding:10px 18px;
+    padding:8px 16px;
     border:none;
     border-radius:8px;
     background:gold;
     font-weight:bold;
     cursor:pointer;
-    margin-top:10px;
+    margin:5px;
 }
 
 .lixi{
-    width:170px;
-    height:240px;
+    width:160px;
+    height:230px;
     background:linear-gradient(red,#cc0000);
     border-radius:20px;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:24px;
+    font-size:22px;
     font-weight:bold;
     cursor:pointer;
-    box-shadow:0 0 25px gold;
-    margin:35px auto;
+    box-shadow:0 0 20px gold;
+    margin:30px auto;
 }
 
 .shake{
@@ -75,117 +77,122 @@ button{
 
 @keyframes shake{
     0%{transform:rotate(-6deg);}
-    25%{transform:rotate(6deg);}
-    50%{transform:rotate(-6deg);}
-    75%{transform:rotate(6deg);}
-    100%{transform:rotate(0deg);}
+    50%{transform:rotate(6deg);}
+    100%{transform:rotate(0);}
 }
 
 .result{
-    font-size:30px;
-    font-weight:bold;
+    font-size:28px;
     margin-top:20px;
 }
 
-.money{
-    position:absolute;
-    font-size:24px;
-    animation: fall 3s linear forwards;
+#leaderboard{
+    width:320px;
+    margin:30px auto;
+    background:rgba(0,0,0,0.4);
+    padding:15px;
+    border-radius:12px;
+    box-shadow:0 0 10px gold;
 }
 
-@keyframes fall{
-    0%{transform:translateY(-50px);opacity:1;}
-    100%{transform:translateY(100vh);opacity:0;}
+.rank-item{
+    padding:6px 0;
+    border-bottom:1px solid rgba(255,255,255,0.2);
+}
+.top1{color:gold;font-weight:bold;}
+.top2{color:silver;font-weight:bold;}
+.top3{color:#cd7f32;font-weight:bold;}
+
+.sound-toggle{
+    position:fixed;
+    top:10px;
+    right:10px;
 }
 </style>
 </head>
-
 <body>
+
+<div class="sound-toggle">
+    <button onclick="toggleSound()">🔊 Bật/Tắt Âm Thanh</button>
+</div>
 
 <div class="banner">🧧 LÌ XÌ MAY MẮN 2026 🧧</div>
 
-<!-- BƯỚC 1 -->
+<!-- CHỌN MỆNH GIÁ -->
 <div class="step" id="step1">
-    <h3>Nhập các mệnh giá (cách nhau bằng dấu phẩy)</h3>
-    <input type="text" id="menhGiaInput"
-    placeholder="Ví dụ: 10000,20000,50000">
-
-    <div class="quick-buttons">
-        <button onclick="addQuick(10000)">10k</button>
-        <button onclick="addQuick(20000)">20k</button>
-        <button onclick="addQuick(50000)">50k</button>
-        <button onclick="addQuick(100000)">100k</button>
-        <button onclick="addQuick(500000)">500k</button>
-        <button onclick="addQuick(1000000)">1tr</button>
+    <h3>Chọn các mệnh giá muốn chơi</h3>
+    <div class="amount-buttons">
+        <button onclick="chonMenhGia(10000,this)">10k</button>
+        <button onclick="chonMenhGia(20000,this)">20k</button>
+        <button onclick="chonMenhGia(50000,this)">50k</button>
+        <button onclick="chonMenhGia(100000,this)">100k</button>
+        <button onclick="chonMenhGia(200000,this)">200k</button>
+        <button onclick="chonMenhGia(500000,this)">500k</button>
     </div>
-
     <br>
     <button onclick="xacNhanMenhGia()">Tiếp tục</button>
 </div>
 
-<!-- BƯỚC 2 -->
+<!-- NHẬP TÊN -->
 <div class="step" id="step2" style="display:none;">
     <h3>Nhập tên của bạn</h3>
-    <input type="text" id="playerName" placeholder="Nhập tên...">
+    <input type="text" id="playerName">
     <br>
     <button onclick="hienLiXi()">Tiếp tục</button>
 </div>
 
-<!-- BƯỚC 3 -->
+<!-- MỞ LÌ XÌ -->
 <div class="step" id="step3" style="display:none;">
     <div class="lixi" id="lixi" onclick="moLiXi()">🎁 MỞ LÌ XÌ</div>
 </div>
 
 <div class="result" id="ketqua"></div>
 
-<audio id="tingSound">
-  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_5e4c0e2a7f.mp3">
-</audio>
+<div id="leaderboard">
+    <h3>🏆 BẢNG XẾP HẠNG</h3>
+    <div id="bxh"></div>
+    <button onclick="resetBXH()">Reset BXH</button>
+</div>
+
+<!-- Âm thanh -->
+<audio id="shakeSound" src="shake.mp3" loop></audio>
+<audio id="openSound" src="open.mp3"></audio>
 
 <script>
 
-let danhSachMenhGia = [];
+let danhSachMenhGia=[];
+let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || {};
+let soundOn = true;
 
-function addQuick(value){
-    const input = document.getElementById("menhGiaInput");
-    if(input.value===""){
-        input.value = value;
+capNhatBXH();
+
+function toggleSound(){
+    soundOn = !soundOn;
+}
+
+function chonMenhGia(value,btn){
+
+    if(danhSachMenhGia.includes(value)){
+        danhSachMenhGia = danhSachMenhGia.filter(v=>v!==value);
+        btn.classList.remove("active");
     }else{
-        input.value += "," + value;
+        danhSachMenhGia.push(value);
+        btn.classList.add("active");
     }
 }
 
 function xacNhanMenhGia(){
-
-    const raw = document.getElementById("menhGiaInput").value;
-
-    if(!raw){
-        alert("Vui lòng nhập mệnh giá!");
-        return;
-    }
-
-    danhSachMenhGia = raw
-        .split(",")
-        .map(x=>parseInt(x.trim()))
-        .filter(x=>!isNaN(x) && x>0);
-
     if(danhSachMenhGia.length===0){
-        alert("Mệnh giá không hợp lệ!");
+        alert("Hãy chọn ít nhất 1 mệnh giá!");
         return;
     }
-
     document.getElementById("step1").style.display="none";
     document.getElementById("step2").style.display="block";
 }
 
 function hienLiXi(){
-
     const ten = document.getElementById("playerName").value;
-
-    if(!ten){
-        alert("Vui lòng nhập tên!");
-        return;
-    }
+    if(!ten){ alert("Nhập tên!"); return; }
 
     document.getElementById("step2").style.display="none";
     document.getElementById("step3").style.display="block";
@@ -195,44 +202,71 @@ function moLiXi(){
 
     const lixi = document.getElementById("lixi");
     const ketqua = document.getElementById("ketqua");
-    const sound = document.getElementById("tingSound");
     const ten = document.getElementById("playerName").value;
+
+    const shakeSound = document.getElementById("shakeSound");
+    const openSound = document.getElementById("openSound");
 
     lixi.classList.add("shake");
 
-    if(navigator.vibrate){
-        navigator.vibrate([200,100,200]);
-    }
+    if(soundOn) shakeSound.play();
+    if(navigator.vibrate) navigator.vibrate([200,100,200]);
 
     setTimeout(()=>{
 
         lixi.classList.remove("shake");
+        shakeSound.pause();
+        shakeSound.currentTime=0;
 
-        const randomIndex = Math.floor(Math.random() * danhSachMenhGia.length);
+        if(soundOn) openSound.play();
+
+        const randomIndex = Math.floor(Math.random()*danhSachMenhGia.length);
         const tien = danhSachMenhGia[randomIndex];
 
-        sound.play();
+        ketqua.innerHTML=
+        "🎉 "+ten+" nhận được:<br><span style='color:gold'>"+
+        tien.toLocaleString('vi-VN')+"đ</span>";
 
-        ketqua.innerHTML =
-        "🎉 "+ten+" nhận được:<br><span style='color:gold'>" +
-        tien.toLocaleString('vi-VN') + "đ</span>";
+        confetti({particleCount:200,spread:120,origin:{y:0.6}});
 
-        confetti({
-            particleCount: 200,
-            spread: 120,
-            origin: { y: 0.6 }
-        });
+        if(!leaderboard[ten]) leaderboard[ten]=0;
+        leaderboard[ten]+=tien;
 
-        for(let i=0;i<15;i++){
-            let money = document.createElement("div");
-            money.className="money";
-            money.innerHTML="💸";
-            money.style.left=Math.random()*100+"vw";
-            document.body.appendChild(money);
-            setTimeout(()=>{money.remove();},3000);
-        }
+        localStorage.setItem("leaderboard",JSON.stringify(leaderboard));
+        capNhatBXH();
 
     },1500);
+}
+
+function capNhatBXH(){
+
+    let bxh = document.getElementById("bxh");
+
+    let sorted = Object.entries(leaderboard)
+    .sort((a,b)=>b[1]-a[1]);
+
+    bxh.innerHTML="";
+
+    sorted.forEach((item,index)=>{
+
+        let classRank="";
+        if(index===0) classRank="top1";
+        if(index===1) classRank="top2";
+        if(index===2) classRank="top3";
+
+        bxh.innerHTML+=
+        `<div class="rank-item ${classRank}">
+        ${index+1}. ${item[0]} - ${item[1].toLocaleString('vi-VN')}đ
+        </div>`;
+    });
+}
+
+function resetBXH(){
+    if(confirm("Reset bảng xếp hạng?")){
+        localStorage.removeItem("leaderboard");
+        leaderboard={};
+        capNhatBXH();
+    }
 }
 
 </script>
