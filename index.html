@@ -27,37 +27,24 @@ body{
     margin-top:30px;
 }
 
-.amount-options button{
-    margin:10px;
-    padding:12px 20px;
-    font-size:18px;
-    border:none;
-    border-radius:10px;
-    background:gold;
-    cursor:pointer;
-    font-weight:bold;
-}
-
-.amount-options button:hover{
-    background:orange;
-}
-
 input{
-    padding:10px;
+    padding:12px;
     font-size:18px;
     border-radius:8px;
     border:none;
+    width:200px;
+    text-align:center;
 }
 
-.startBtn{
+button{
     padding:12px 20px;
     font-size:18px;
-    margin-left:10px;
     border:none;
     border-radius:10px;
     background:gold;
     cursor:pointer;
     font-weight:bold;
+    margin-left:10px;
 }
 
 .lixi{
@@ -73,7 +60,6 @@ input{
     cursor:pointer;
     box-shadow:0 0 25px gold;
     margin:40px auto;
-    transition:transform 0.2s;
 }
 
 .shake{
@@ -81,10 +67,10 @@ input{
 }
 
 @keyframes shake{
-    0%{transform:rotate(-5deg);}
-    25%{transform:rotate(5deg);}
-    50%{transform:rotate(-5deg);}
-    75%{transform:rotate(5deg);}
+    0%{transform:rotate(-6deg);}
+    25%{transform:rotate(6deg);}
+    50%{transform:rotate(-6deg);}
+    75%{transform:rotate(6deg);}
     100%{transform:rotate(0deg);}
 }
 
@@ -121,25 +107,21 @@ input{
 
 <div class="banner">🎉 LÌ XÌ TẾT BÍNH NGỌ 🐎 🎉</div>
 
-<!-- BƯỚC 1: CHỌN MỆNH GIÁ -->
+<!-- BƯỚC 1: NHẬP MỆNH GIÁ -->
 <div class="step" id="step1">
-    <h2>Chọn mệnh giá</h2>
-    <div class="amount-options">
-        <button onclick="chonMenhGia(10000)">10.000đ</button>
-        <button onclick="chonMenhGia(50000)">50.000đ</button>
-        <button onclick="chonMenhGia(100000)">100.000đ</button>
-        <button onclick="chonMenhGia(500000)">500.000đ</button>
-    </div>
+    <h2>Nhập mệnh giá bạn muốn bỏ vào lì xì</h2>
+    <input type="number" id="menhGiaInput" placeholder="Ví dụ: 500000">
+    <button onclick="xacNhanMenhGia()">Tiếp tục</button>
 </div>
 
 <!-- BƯỚC 2: NHẬP TÊN -->
 <div class="step" id="step2" style="display:none;">
     <h2>Nhập tên của bạn</h2>
     <input type="text" id="playerName" placeholder="Nhập tên...">
-    <button class="startBtn" onclick="hienLiXi()">Tiếp tục</button>
+    <button onclick="hienLiXi()">Tiếp tục</button>
 </div>
 
-<!-- BƯỚC 3: LẮC LÌ XÌ -->
+<!-- BƯỚC 3: MỞ LÌ XÌ -->
 <div class="step" id="step3" style="display:none;">
     <div class="lixi" id="lixi" onclick="moLiXi()">🧧 LẮC LÌ XÌ</div>
 </div>
@@ -158,22 +140,32 @@ input{
 <script>
 
 let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || {};
-let menhGiaDaChon = 0;
+let menhGiaDaNhap = 0;
 
 capNhatBXH();
 
-function chonMenhGia(value){
-    menhGiaDaChon = value;
+function xacNhanMenhGia(){
+    const value = parseInt(document.getElementById("menhGiaInput").value);
+
+    if(!value || value <= 0){
+        alert("Vui lòng nhập mệnh giá hợp lệ!");
+        return;
+    }
+
+    menhGiaDaNhap = value;
+
     document.getElementById("step1").style.display="none";
     document.getElementById("step2").style.display="block";
 }
 
 function hienLiXi(){
     const ten = document.getElementById("playerName").value;
+
     if(!ten){
         alert("Vui lòng nhập tên!");
         return;
     }
+
     document.getElementById("step2").style.display="none";
     document.getElementById("step3").style.display="block";
 }
@@ -181,13 +173,12 @@ function hienLiXi(){
 function moLiXi(){
 
     const lixi = document.getElementById("lixi");
-    const ketqua = document.getElementById('ketqua');
-    const sound = document.getElementById('tingSound');
+    const ketqua = document.getElementById("ketqua");
+    const sound = document.getElementById("tingSound");
     const ten = document.getElementById("playerName").value;
 
     lixi.classList.add("shake");
 
-    // Rung điện thoại
     if(navigator.vibrate){
         navigator.vibrate([200,100,200]);
     }
@@ -196,7 +187,7 @@ function moLiXi(){
 
         lixi.classList.remove("shake");
 
-        const tien = Math.floor(Math.random() * menhGiaDaChon) + 1000;
+        const tien = Math.floor(Math.random() * menhGiaDaNhap) + 1;
 
         sound.play();
 
