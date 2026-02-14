@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Lì Xì Tết Bính Ngọ</title>
+<title>Lì Xì Tết Pro</title>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
@@ -17,53 +17,60 @@ body{
 }
 
 .banner{
-    font-size:38px;
+    font-size:34px;
     font-weight:bold;
-    margin-top:25px;
+    margin-top:20px;
     text-shadow:0 0 15px yellow;
 }
 
-.step{
-    margin-top:30px;
-}
+.step{ margin-top:25px; }
 
 input{
-    padding:12px;
-    font-size:18px;
+    padding:10px;
+    font-size:16px;
     border-radius:8px;
     border:none;
-    width:200px;
+    width:280px;
     text-align:center;
 }
 
-button{
-    padding:12px 20px;
-    font-size:18px;
+.quick-buttons button{
+    margin:6px;
+    padding:8px 14px;
     border:none;
-    border-radius:10px;
+    border-radius:8px;
     background:gold;
-    cursor:pointer;
     font-weight:bold;
-    margin-left:10px;
+    cursor:pointer;
+}
+
+button{
+    padding:10px 18px;
+    border:none;
+    border-radius:8px;
+    background:gold;
+    font-weight:bold;
+    cursor:pointer;
+    margin-top:10px;
 }
 
 .lixi{
-    width:180px;
-    height:260px;
+    width:170px;
+    height:240px;
     background:linear-gradient(red,#cc0000);
     border-radius:20px;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:28px;
+    font-size:24px;
     font-weight:bold;
     cursor:pointer;
     box-shadow:0 0 25px gold;
-    margin:40px auto;
+    margin:35px auto;
 }
 
 .shake{
-    animation:shake 0.5s infinite;
+    animation:shake 0.4s infinite;
 }
 
 @keyframes shake{
@@ -75,9 +82,9 @@ button{
 }
 
 .result{
-    margin-top:30px;
-    font-size:32px;
+    font-size:30px;
     font-weight:bold;
+    margin-top:20px;
 }
 
 .money{
@@ -90,48 +97,46 @@ button{
     0%{transform:translateY(-50px);opacity:1;}
     100%{transform:translateY(100vh);opacity:0;}
 }
-
-#leaderboard{
-    margin-top:30px;
-    background:rgba(0,0,0,0.4);
-    padding:15px;
-    border-radius:10px;
-    width:300px;
-    margin-left:auto;
-    margin-right:auto;
-}
 </style>
 </head>
 
 <body>
 
-<div class="banner">🎉 LÌ XÌ TẾT BÍNH NGỌ 🐎 🎉</div>
+<div class="banner">🧧 LÌ XÌ MAY MẮN 2026 🧧</div>
 
-<!-- BƯỚC 1: NHẬP MỆNH GIÁ -->
+<!-- BƯỚC 1 -->
 <div class="step" id="step1">
-    <h2>Nhập mệnh giá bạn muốn bỏ vào lì xì</h2>
-    <input type="number" id="menhGiaInput" placeholder="Ví dụ: 500000">
+    <h3>Nhập các mệnh giá (cách nhau bằng dấu phẩy)</h3>
+    <input type="text" id="menhGiaInput"
+    placeholder="Ví dụ: 10000,20000,50000">
+
+    <div class="quick-buttons">
+        <button onclick="addQuick(10000)">10k</button>
+        <button onclick="addQuick(20000)">20k</button>
+        <button onclick="addQuick(50000)">50k</button>
+        <button onclick="addQuick(100000)">100k</button>
+        <button onclick="addQuick(500000)">500k</button>
+        <button onclick="addQuick(1000000)">1tr</button>
+    </div>
+
+    <br>
     <button onclick="xacNhanMenhGia()">Tiếp tục</button>
 </div>
 
-<!-- BƯỚC 2: NHẬP TÊN -->
+<!-- BƯỚC 2 -->
 <div class="step" id="step2" style="display:none;">
-    <h2>Nhập tên của bạn</h2>
+    <h3>Nhập tên của bạn</h3>
     <input type="text" id="playerName" placeholder="Nhập tên...">
+    <br>
     <button onclick="hienLiXi()">Tiếp tục</button>
 </div>
 
-<!-- BƯỚC 3: MỞ LÌ XÌ -->
+<!-- BƯỚC 3 -->
 <div class="step" id="step3" style="display:none;">
-    <div class="lixi" id="lixi" onclick="moLiXi()">🧧 LẮC LÌ XÌ</div>
+    <div class="lixi" id="lixi" onclick="moLiXi()">🎁 MỞ LÌ XÌ</div>
 </div>
 
 <div class="result" id="ketqua"></div>
-
-<div id="leaderboard">
-<h3>🏆 Bảng Xếp Hạng</h3>
-<div id="bxh"></div>
-</div>
 
 <audio id="tingSound">
   <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_5e4c0e2a7f.mp3">
@@ -139,26 +144,42 @@ button{
 
 <script>
 
-let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || {};
-let menhGiaDaNhap = 0;
+let danhSachMenhGia = [];
 
-capNhatBXH();
+function addQuick(value){
+    const input = document.getElementById("menhGiaInput");
+    if(input.value===""){
+        input.value = value;
+    }else{
+        input.value += "," + value;
+    }
+}
 
 function xacNhanMenhGia(){
-    const value = parseInt(document.getElementById("menhGiaInput").value);
 
-    if(!value || value <= 0){
-        alert("Vui lòng nhập mệnh giá hợp lệ!");
+    const raw = document.getElementById("menhGiaInput").value;
+
+    if(!raw){
+        alert("Vui lòng nhập mệnh giá!");
         return;
     }
 
-    menhGiaDaNhap = value;
+    danhSachMenhGia = raw
+        .split(",")
+        .map(x=>parseInt(x.trim()))
+        .filter(x=>!isNaN(x) && x>0);
+
+    if(danhSachMenhGia.length===0){
+        alert("Mệnh giá không hợp lệ!");
+        return;
+    }
 
     document.getElementById("step1").style.display="none";
     document.getElementById("step2").style.display="block";
 }
 
 function hienLiXi(){
+
     const ten = document.getElementById("playerName").value;
 
     if(!ten){
@@ -187,12 +208,14 @@ function moLiXi(){
 
         lixi.classList.remove("shake");
 
-        const tien = Math.floor(Math.random() * menhGiaDaNhap) + 1;
+        const randomIndex = Math.floor(Math.random() * danhSachMenhGia.length);
+        const tien = danhSachMenhGia[randomIndex];
 
         sound.play();
 
-        ketqua.innerHTML = "🐎 "+ten+" nhận được:<br><span style='color:gold'>" 
-        + tien.toLocaleString() + "đ</span>";
+        ketqua.innerHTML =
+        "🎉 "+ten+" nhận được:<br><span style='color:gold'>" +
+        tien.toLocaleString('vi-VN') + "đ</span>";
 
         confetti({
             particleCount: 200,
@@ -209,28 +232,7 @@ function moLiXi(){
             setTimeout(()=>{money.remove();},3000);
         }
 
-        if(!leaderboard[ten]) leaderboard[ten]=0;
-        leaderboard[ten]+=tien;
-        localStorage.setItem("leaderboard",JSON.stringify(leaderboard));
-        capNhatBXH();
-
-    },2000);
-}
-
-function capNhatBXH(){
-
-    let bxh = document.getElementById("bxh");
-
-    let sorted = Object.entries(leaderboard)
-    .sort((a,b)=>b[1]-a[1]);
-
-    bxh.innerHTML="";
-
-    sorted.forEach((item,index)=>{
-        bxh.innerHTML += 
-        (index+1)+". "+item[0]+" - "+
-        item[1].toLocaleString()+"đ<br>";
-    });
+    },1500);
 }
 
 </script>
