@@ -157,7 +157,9 @@ button{
 <!-- Âm thanh -->
 <audio id="shakeSound" src="shake.mp3" loop></audio>
 <audio id="openSound" src="open.mp3"></audio>
-
+<audio id="bgMusic" loop>
+    <source src="kk.mp3" type="audio/mpeg">
+</audio>
 <script>
 
 let danhSachMenhGia=[];
@@ -165,7 +167,16 @@ let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || {};
 let soundOn = true;
 
 capNhatBXH();
+let musicStarted = false;
+function startAll() {
+    randomResult();
 
+    if (!musicStarted) {
+        document.getElementById("bgMusic").play();
+        musicStarted = true;
+    }
+}
+    
 function toggleSound(){
     soundOn = !soundOn;
 }
@@ -273,3 +284,4 @@ function resetBXH(){
 
 </body>
 </html>
+
