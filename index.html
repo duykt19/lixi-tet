@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <title>Lì Xì Tết Bính Ngọ</title>
+
+<!-- Thư viện pháo hoa -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
 <style>
 body{
     margin:0;
@@ -12,34 +16,12 @@ body{
     color:white;
     overflow:hidden;
 }
+
 .banner{
-    font-size:42px;
+    font-size:38px;
     font-weight:bold;
     margin-top:25px;
     text-shadow:0 0 15px yellow;
-    animation: glow 2s infinite alternate;
-}
-@keyframes glow{
-    from{ text-shadow:0 0 10px #fff;}
-    to{ text-shadow:0 0 30px gold;}
-}
-
-.horse{
-    margin-top:20px;
-    animation: float 3s ease-in-out infinite;
-}
-.horse img{
-    width:250px;
-    filter: drop-shadow(0 0 20px gold);
-}
-@keyframes float{
-    0%{transform:translateY(0px);}
-    50%{transform:translateY(-15px);}
-    100%{transform:translateY(0px);}
-}
-
-.lixi-container{
-    margin-top:40px;
 }
 
 .lixi{
@@ -54,68 +36,127 @@ body{
     font-weight:bold;
     cursor:pointer;
     box-shadow:0 0 25px gold;
-    transition: transform 0.3s;
-}
-
-.lixi:hover{
-    transform: scale(1.08);
-}
-
-.open{
-    animation: shake 0.6s;
-}
-@keyframes shake{
-    0%{transform:rotate(0deg);}
-    25%{transform:rotate(12deg);}
-    50%{transform:rotate(-12deg);}
-    75%{transform:rotate(6deg);}
-    100%{transform:rotate(0deg);}
+    margin-top:40px;
 }
 
 .result{
-    margin-top:35px;
-    font-size:34px;
+    margin-top:30px;
+    font-size:32px;
     font-weight:bold;
-    display:none;
-    animation: pop 0.8s forwards;
 }
-@keyframes pop{
-    from{transform:scale(0);}
-    to{transform:scale(1);}
+
+.money{
+    position:absolute;
+    font-size:24px;
+    animation: fall 3s linear forwards;
+}
+
+@keyframes fall{
+    0%{transform:translateY(-50px);opacity:1;}
+    100%{transform:translateY(100vh);opacity:0;}
+}
+
+#leaderboard{
+    margin-top:30px;
+    background:rgba(0,0,0,0.4);
+    padding:15px;
+    border-radius:10px;
+    width:300px;
+    margin-left:auto;
+    margin-right:auto;
 }
 </style>
 </head>
+
 <body>
 
-<div class="banner">🎉 CHÚC MỪNG NĂM MỚI BỘ PHÂN KỸ THUẬT CWT - BÍNH NGỌ 🐎 🎉</div>
+<div class="banner">🎉 LÌ XÌ TẾT BÍNH NGỌ 🐎 🎉</div>
 
-<div class="horse">
-    <!-- Bạn có thể thay link hình ngựa khác nếu muốn -->
-    <img src="https://cdnmedia.tinmoi.vn/upload/daohoa/2022/11/09/giai-nghia-tranh-ma-dao-thanh-cong-nhung-ly-do-hai-huoc-khien-mot-con-ngua-quay-dau-nguoc-lai-1667963450-1.jpg" alt="Ngựa vàng Bính Ngọ">
-</div>
-
-<div class="lixi-container">
-    <div class="lixi" onclick="moLiXi()">🧧 LẮC LÌ XÌ</div>
-</div>
+<div class="lixi" onclick="moLiXi()">🧧 LẮC LÌ XÌ</div>
 
 <div class="result" id="ketqua"></div>
 
+<div id="leaderboard">
+<h3>🏆 Bảng Xếp Hạng</h3>
+<div id="bxh"></div>
+</div>
+
+<audio id="tingSound">
+  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_5e4c0e2a7f.mp3">
+</audio>
+
 <script>
+
+let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || {};
+capNhatBXH();
+
 function moLiXi(){
-    const lixi = document.querySelector('.lixi');
+
     const ketqua = document.getElementById('ketqua');
+    const sound = document.getElementById('tingSound');
 
-    lixi.classList.add("open");
+    const ten = prompt("Nhập tên của bạn:");
 
-    const menhGia = ["100.000đ", "200.000đ", "500.000đ"];
+    if(!ten) return;
+
+    const menhGia = [
+    10000,20000,50000,100000,150000,200000,
+    300000,500000,800000,1000000,
+    2000000,3000000,5000000,8000000,
+    10000000,15000000,20000000
+    ];
+
     const random = Math.floor(Math.random() * menhGia.length);
+    const tien = menhGia[random];
 
-    setTimeout(()=>{
-        ketqua.style.display = "block";
-        ketqua.innerHTML = "🐎 Bạn nhận được: " + menhGia[random] + 
-        "<br>✨ Chúc Mừng Năm Mới Bính Ngọ ✨";
-    },800);
+    sound.play();
+
+    ketqua.innerHTML = "🐎 "+ten+" nhận được: <br><span style='color:gold'>" 
+    + tien.toLocaleString() + "đ</span>";
+
+    // 🎆 Pháo hoa
+    confetti({
+        particleCount: 200,
+        spread: 120,
+        origin: { y: 0.6 }
+    });
+
+    // 🎊 Tiền bay
+    for(let i=0;i<15;i++){
+        let money = document.createElement("div");
+        money.className="money";
+        money.innerHTML="💸";
+        money.style.left=Math.random()*100+"vw";
+        document.body.appendChild(money);
+
+        setTimeout(()=>{money.remove();},3000);
+    }
+
+    // 🏆 Lưu bảng xếp hạng
+    if(!leaderboard[ten]) leaderboard[ten]=0;
+    leaderboard[ten]+=tien;
+
+    localStorage.setItem("leaderboard",JSON.stringify(leaderboard));
+
+    capNhatBXH();
 }
+
+function capNhatBXH(){
+
+    let bxh = document.getElementById("bxh");
+
+    let sorted = Object.entries(leaderboard)
+    .sort((a,b)=>b[1]-a[1]);
+
+    bxh.innerHTML="";
+
+    sorted.forEach((item,index)=>{
+        bxh.innerHTML += 
+        (index+1)+". "+item[0]+" - "+
+        item[1].toLocaleString()+"đ<br>";
+    });
+}
+
 </script>
 
 </body>
