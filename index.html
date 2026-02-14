@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>Lì Xì Tết Bính Ngọ</title>
 
-<!-- Thư viện pháo hoa -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <style>
@@ -24,19 +23,69 @@ body{
     text-shadow:0 0 15px yellow;
 }
 
+.step{
+    margin-top:30px;
+}
+
+.amount-options button{
+    margin:10px;
+    padding:12px 20px;
+    font-size:18px;
+    border:none;
+    border-radius:10px;
+    background:gold;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.amount-options button:hover{
+    background:orange;
+}
+
+input{
+    padding:10px;
+    font-size:18px;
+    border-radius:8px;
+    border:none;
+}
+
+.startBtn{
+    padding:12px 20px;
+    font-size:18px;
+    margin-left:10px;
+    border:none;
+    border-radius:10px;
+    background:gold;
+    cursor:pointer;
+    font-weight:bold;
+}
+
 .lixi{
     width:180px;
     height:260px;
     background:linear-gradient(red,#cc0000);
     border-radius:20px;
-    display:inline-flex;
+    display:flex;
     align-items:center;
     justify-content:center;
     font-size:28px;
     font-weight:bold;
     cursor:pointer;
     box-shadow:0 0 25px gold;
-    margin-top:40px;
+    margin:40px auto;
+    transition:transform 0.2s;
+}
+
+.shake{
+    animation:shake 0.5s infinite;
+}
+
+@keyframes shake{
+    0%{transform:rotate(-5deg);}
+    25%{transform:rotate(5deg);}
+    50%{transform:rotate(-5deg);}
+    75%{transform:rotate(5deg);}
+    100%{transform:rotate(0deg);}
 }
 
 .result{
@@ -72,7 +121,28 @@ body{
 
 <div class="banner">🎉 LÌ XÌ TẾT BÍNH NGỌ 🐎 🎉</div>
 
-<div class="lixi" onclick="moLiXi()">🧧 LẮC LÌ XÌ</div>
+<!-- BƯỚC 1: CHỌN MỆNH GIÁ -->
+<div class="step" id="step1">
+    <h2>Chọn mệnh giá</h2>
+    <div class="amount-options">
+        <button onclick="chonMenhGia(10000)">10.000đ</button>
+        <button onclick="chonMenhGia(50000)">50.000đ</button>
+        <button onclick="chonMenhGia(100000)">100.000đ</button>
+        <button onclick="chonMenhGia(500000)">500.000đ</button>
+    </div>
+</div>
+
+<!-- BƯỚC 2: NHẬP TÊN -->
+<div class="step" id="step2" style="display:none;">
+    <h2>Nhập tên của bạn</h2>
+    <input type="text" id="playerName" placeholder="Nhập tên...">
+    <button class="startBtn" onclick="hienLiXi()">Tiếp tục</button>
+</div>
+
+<!-- BƯỚC 3: LẮC LÌ XÌ -->
+<div class="step" id="step3" style="display:none;">
+    <div class="lixi" id="lixi" onclick="moLiXi()">🧧 LẮC LÌ XÌ</div>
+</div>
 
 <div class="result" id="ketqua"></div>
 
@@ -88,57 +158,72 @@ body{
 <script>
 
 let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || {};
+let menhGiaDaChon = 0;
+
 capNhatBXH();
+
+function chonMenhGia(value){
+    menhGiaDaChon = value;
+    document.getElementById("step1").style.display="none";
+    document.getElementById("step2").style.display="block";
+}
+
+function hienLiXi(){
+    const ten = document.getElementById("playerName").value;
+    if(!ten){
+        alert("Vui lòng nhập tên!");
+        return;
+    }
+    document.getElementById("step2").style.display="none";
+    document.getElementById("step3").style.display="block";
+}
 
 function moLiXi(){
 
+    const lixi = document.getElementById("lixi");
     const ketqua = document.getElementById('ketqua');
     const sound = document.getElementById('tingSound');
+    const ten = document.getElementById("playerName").value;
 
-    const ten = prompt("Nhập tên của bạn:");
+    lixi.classList.add("shake");
 
-    if(!ten) return;
-
-    const menhGia = [
-    10000,20000,50000,100000,150000,200000,
-    300000,500000,800000,1000000,
-    2000000,3000000,5000000,8000000,
-    10000000,15000000,20000000
-    ];
-
-    const random = Math.floor(Math.random() * menhGia.length);
-    const tien = menhGia[random];
-
-    sound.play();
-
-    ketqua.innerHTML = "🐎 "+ten+" nhận được: <br><span style='color:gold'>" 
-    + tien.toLocaleString() + "đ</span>";
-
-    // 🎆 Pháo hoa
-    confetti({
-        particleCount: 200,
-        spread: 120,
-        origin: { y: 0.6 }
-    });
-
-    // 🎊 Tiền bay
-    for(let i=0;i<15;i++){
-        let money = document.createElement("div");
-        money.className="money";
-        money.innerHTML="💸";
-        money.style.left=Math.random()*100+"vw";
-        document.body.appendChild(money);
-
-        setTimeout(()=>{money.remove();},3000);
+    // Rung điện thoại
+    if(navigator.vibrate){
+        navigator.vibrate([200,100,200]);
     }
 
-    // 🏆 Lưu bảng xếp hạng
-    if(!leaderboard[ten]) leaderboard[ten]=0;
-    leaderboard[ten]+=tien;
+    setTimeout(()=>{
 
-    localStorage.setItem("leaderboard",JSON.stringify(leaderboard));
+        lixi.classList.remove("shake");
 
-    capNhatBXH();
+        const tien = Math.floor(Math.random() * menhGiaDaChon) + 1000;
+
+        sound.play();
+
+        ketqua.innerHTML = "🐎 "+ten+" nhận được:<br><span style='color:gold'>" 
+        + tien.toLocaleString() + "đ</span>";
+
+        confetti({
+            particleCount: 200,
+            spread: 120,
+            origin: { y: 0.6 }
+        });
+
+        for(let i=0;i<15;i++){
+            let money = document.createElement("div");
+            money.className="money";
+            money.innerHTML="💸";
+            money.style.left=Math.random()*100+"vw";
+            document.body.appendChild(money);
+            setTimeout(()=>{money.remove();},3000);
+        }
+
+        if(!leaderboard[ten]) leaderboard[ten]=0;
+        leaderboard[ten]+=tien;
+        localStorage.setItem("leaderboard",JSON.stringify(leaderboard));
+        capNhatBXH();
+
+    },2000);
 }
 
 function capNhatBXH(){
