@@ -2,189 +2,182 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Lì Xì Tết Pro 2026</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bốc Lì Xì 2026</title>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <style>
 body{
     margin:0;
-    font-family: Arial, sans-serif;
-    background: radial-gradient(circle,#b30000,#660000);
+    font-family:'Segoe UI',sans-serif;
+    background:linear-gradient(135deg,#8b0000,#b30000);
     color:white;
     text-align:center;
 }
 
-.banner{
-    font-size:32px;
+.container{
+    max-width:600px;
+    margin:auto;
+    padding:20px;
+}
+
+.title{
+    font-size:26px;
     font-weight:bold;
-    margin-top:20px;
     text-shadow:0 0 15px gold;
 }
 
-.step{ margin-top:25px; }
-
-.amount-buttons button{
-    margin:6px;
-    padding:10px 16px;
-    border:none;
-    border-radius:8px;
-    background:gold;
-    font-weight:bold;
-    cursor:pointer;
-}
-
-.amount-buttons button.active{
-    background:orange;
-}
-
-input{
-    padding:10px;
-    border-radius:8px;
-    border:none;
-    width:200px;
-    text-align:center;
+.card{
+    background:rgba(255,255,255,0.1);
+    padding:20px;
+    border-radius:18px;
+    margin-top:20px;
+    backdrop-filter:blur(10px);
 }
 
 button{
-    padding:8px 16px;
+    padding:10px 16px;
     border:none;
-    border-radius:8px;
+    border-radius:10px;
     background:gold;
     font-weight:bold;
     cursor:pointer;
     margin:5px;
 }
 
+.amount-buttons button.active{
+    background:orange;
+    color:white;
+}
+
+input{
+    padding:10px;
+    border-radius:10px;
+    border:none;
+    width:90%;
+    max-width:260px;
+    text-align:center;
+    margin:8px 0;
+}
+
+/* 5 bao lì xì */
+.lixi-container{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    flex-wrap:wrap;
+    margin-top:20px;
+}
+
 .lixi{
-    width:160px;
-    height:230px;
+    width:110px;
+    height:160px;
     background:linear-gradient(red,#cc0000);
-    border-radius:20px;
+    border-radius:15px;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:22px;
     font-weight:bold;
     cursor:pointer;
-    box-shadow:0 0 20px gold;
-    margin:30px auto;
+    box-shadow:0 0 15px gold;
+    transition:0.3s;
 }
 
-.shake{
-    animation:shake 0.4s infinite;
+.lixi:hover{
+    transform:translateY(-8px);
 }
 
-@keyframes shake{
-    0%{transform:rotate(-6deg);}
-    50%{transform:rotate(6deg);}
-    100%{transform:rotate(0);}
+.opened{
+    background:linear-gradient(gold,orange);
+    color:#8b0000;
+    transform:scale(1.1);
 }
 
 .result{
-    font-size:28px;
+    font-size:24px;
     margin-top:20px;
 }
 
 #leaderboard{
-    width:320px;
-    margin:30px auto;
-    background:rgba(0,0,0,0.4);
+    margin-top:30px;
+    background:rgba(0,0,0,0.3);
     padding:15px;
-    border-radius:12px;
-    box-shadow:0 0 10px gold;
+    border-radius:15px;
 }
 
-.rank-item{
-    padding:6px 0;
-    border-bottom:1px solid rgba(255,255,255,0.2);
-}
 .top1{color:gold;font-weight:bold;}
 .top2{color:silver;font-weight:bold;}
 .top3{color:#cd7f32;font-weight:bold;}
 
-.sound-toggle{
-    position:fixed;
-    top:10px;
-    right:10px;
+@media(max-width:500px){
+    .lixi{
+        width:90px;
+        height:140px;
+    }
 }
 </style>
 </head>
 <body>
 
-<div class="sound-toggle">
-    <button onclick="toggleSound()">🔊 Bật/Tắt Âm Thanh</button>
+<div class="container">
+
+<div class="title">🧧 BỐC 1 TRONG 5 BAO LÌ XÌ 🧧</div>
+
+<div id="step1" class="card">
+<h3>Chọn hoặc thêm mệnh giá</h3>
+
+<div class="amount-buttons">
+<button onclick="chonMenhGia(10000,this)">10k</button>
+<button onclick="chonMenhGia(20000,this)">20k</button>
+<button onclick="chonMenhGia(50000,this)">50k</button>
+<button onclick="chonMenhGia(100000,this)">100k</button>
+<button onclick="chonMenhGia(200000,this)">200k</button>
+<button onclick="chonMenhGia(500000,this)">500k</button>
 </div>
 
-<div class="banner">🧧 LÌ XÌ MAY MẮN 2026 🧧</div>
-
-<!-- CHỌN MỆNH GIÁ -->
-<div class="step" id="step1">
-    <h3>Chọn các mệnh giá muốn chơi</h3>
-    <div class="amount-buttons">
-        <button onclick="chonMenhGia(10000,this)">10k</button>
-        <button onclick="chonMenhGia(20000,this)">20k</button>
-        <button onclick="chonMenhGia(50000,this)">50k</button>
-        <button onclick="chonMenhGia(100000,this)">100k</button>
-        <button onclick="chonMenhGia(200000,this)">200k</button>
-        <button onclick="chonMenhGia(500000,this)">500k</button>
-    </div>
-    <br>
-    <button onclick="xacNhanMenhGia()">Tiếp tục</button>
+<input type="number" id="customAmount" placeholder="Nhập mệnh giá thêm">
+<br>
+<button onclick="themMenhGia()">Thêm mệnh giá</button>
+<br><br>
+<button onclick="xacNhanMenhGia()">Tiếp tục</button>
 </div>
 
-<!-- NHẬP TÊN -->
-<div class="step" id="step2" style="display:none;">
-    <h3>Nhập tên của bạn</h3>
-    <input type="text" id="playerName">
-    <br>
-    <button onclick="hienLiXi()">Tiếp tục</button>
+<div id="step2" class="card" style="display:none;">
+<h3>Nhập tên của bạn</h3>
+<input type="text" id="playerName">
+<br>
+<button onclick="hienBaoLiXi()">Hiện 5 bao</button>
 </div>
 
-<!-- MỞ LÌ XÌ -->
-<div class="step" id="step3" style="display:none;">
-    <div class="lixi" id="lixi" onclick="moLiXi()">🎁 MỞ LÌ XÌ</div>
-</div>
-
+<div id="step3" class="card" style="display:none;">
+<h3>Chọn 1 bao may mắn</h3>
+<div class="lixi-container" id="lixiContainer"></div>
 <div class="result" id="ketqua"></div>
+</div>
 
 <div id="leaderboard">
-    <h3>🏆 BẢNG XẾP HẠNG</h3>
-    <div id="bxh"></div>
-    <button onclick="resetBXH()">Reset BXH</button>
+<h3>🏆 BẢNG XẾP HẠNG</h3>
+<div id="bxh"></div>
+<button onclick="resetBXH()">Reset BXH</button>
 </div>
 
-<!-- Âm thanh -->
-<audio id="shakeSound" src="shake.mp3" loop></audio>
-<audio id="openSound" src="open.mp3"></audio>
+</div>
+
+<!-- Nhạc nền -->
 <audio id="bgMusic" loop>
-    <source src="kk.mp3" type="audio/mpeg">
+<source src="kk.mp3" type="audio/mpeg">
 </audio>
+
 <script>
 
 let danhSachMenhGia=[];
-let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || {};
-let soundOn = true;
-
-capNhatBXH();
-let musicStarted = false;
-function startAll() {
-    randomResult();
-
-    if (!musicStarted) {
-        document.getElementById("bgMusic").play();
-        musicStarted = true;
-    }
-}
-    
-function toggleSound(){
-    soundOn = !soundOn;
-}
+let leaderboard=JSON.parse(localStorage.getItem("leaderboard"))||{};
+let musicStarted=false;
 
 function chonMenhGia(value,btn){
-
     if(danhSachMenhGia.includes(value)){
-        danhSachMenhGia = danhSachMenhGia.filter(v=>v!==value);
+        danhSachMenhGia=danhSachMenhGia.filter(v=>v!==value);
         btn.classList.remove("active");
     }else{
         danhSachMenhGia.push(value);
@@ -192,81 +185,82 @@ function chonMenhGia(value,btn){
     }
 }
 
+function themMenhGia(){
+    let value=parseInt(document.getElementById("customAmount").value);
+    if(!value||value<=0){alert("Nhập số hợp lệ");return;}
+    danhSachMenhGia.push(value);
+    alert("Đã thêm "+value.toLocaleString('vi-VN')+"đ");
+    document.getElementById("customAmount").value="";
+}
+
 function xacNhanMenhGia(){
     if(danhSachMenhGia.length===0){
-        alert("Hãy chọn ít nhất 1 mệnh giá!");
+        alert("Chọn ít nhất 1 mệnh giá!");
         return;
     }
     document.getElementById("step1").style.display="none";
     document.getElementById("step2").style.display="block";
 }
 
-function hienLiXi(){
-    const ten = document.getElementById("playerName").value;
-    if(!ten){ alert("Nhập tên!"); return; }
+function hienBaoLiXi(){
+    let ten=document.getElementById("playerName").value;
+    if(!ten){alert("Nhập tên!");return;}
 
     document.getElementById("step2").style.display="none";
     document.getElementById("step3").style.display="block";
+
+    let container=document.getElementById("lixiContainer");
+    container.innerHTML="";
+
+    for(let i=0;i<5;i++){
+        let div=document.createElement("div");
+        div.className="lixi";
+        div.innerHTML="🧧";
+        div.onclick=function(){moBao(this)};
+        container.appendChild(div);
+    }
 }
 
-function moLiXi(){
+function moBao(element){
 
-    const lixi = document.getElementById("lixi");
-    const ketqua = document.getElementById("ketqua");
-    const ten = document.getElementById("playerName").value;
+    if(element.classList.contains("opened")) return;
 
-    const shakeSound = document.getElementById("shakeSound");
-    const openSound = document.getElementById("openSound");
+    // bật nhạc khi click lần đầu
+    if(!musicStarted){
+        document.getElementById("bgMusic").play();
+        musicStarted=true;
+    }
 
-    lixi.classList.add("shake");
+    let ten=document.getElementById("playerName").value;
+    let randomIndex=Math.floor(Math.random()*danhSachMenhGia.length);
+    let tien=danhSachMenhGia[randomIndex];
 
-    if(soundOn) shakeSound.play();
-    if(navigator.vibrate) navigator.vibrate([200,100,200]);
+    element.classList.add("opened");
+    element.innerHTML=tien.toLocaleString('vi-VN')+"đ";
 
-    setTimeout(()=>{
+    document.getElementById("ketqua").innerHTML=
+    "🎉 "+ten+" nhận được <span style='color:gold'>"+
+    tien.toLocaleString('vi-VN')+"đ</span>";
 
-        lixi.classList.remove("shake");
-        shakeSound.pause();
-        shakeSound.currentTime=0;
+    confetti({particleCount:200,spread:100,origin:{y:0.6}});
 
-        if(soundOn) openSound.play();
+    if(!leaderboard[ten]) leaderboard[ten]=0;
+    leaderboard[ten]+=tien;
 
-        const randomIndex = Math.floor(Math.random()*danhSachMenhGia.length);
-        const tien = danhSachMenhGia[randomIndex];
-
-        ketqua.innerHTML=
-        "🎉 "+ten+" nhận được:<br><span style='color:gold'>"+
-        tien.toLocaleString('vi-VN')+"đ</span>";
-
-        confetti({particleCount:200,spread:120,origin:{y:0.6}});
-
-        if(!leaderboard[ten]) leaderboard[ten]=0;
-        leaderboard[ten]+=tien;
-
-        localStorage.setItem("leaderboard",JSON.stringify(leaderboard));
-        capNhatBXH();
-
-    },1500);
+    localStorage.setItem("leaderboard",JSON.stringify(leaderboard));
+    capNhatBXH();
 }
 
 function capNhatBXH(){
-
-    let bxh = document.getElementById("bxh");
-
-    let sorted = Object.entries(leaderboard)
-    .sort((a,b)=>b[1]-a[1]);
-
+    let bxh=document.getElementById("bxh");
+    let sorted=Object.entries(leaderboard).sort((a,b)=>b[1]-a[1]);
     bxh.innerHTML="";
-
     sorted.forEach((item,index)=>{
-
-        let classRank="";
-        if(index===0) classRank="top1";
-        if(index===1) classRank="top2";
-        if(index===2) classRank="top3";
-
-        bxh.innerHTML+=
-        `<div class="rank-item ${classRank}">
+        let cls="";
+        if(index===0) cls="top1";
+        if(index===1) cls="top2";
+        if(index===2) cls="top3";
+        bxh.innerHTML+=`<div class="${cls}">
         ${index+1}. ${item[0]} - ${item[1].toLocaleString('vi-VN')}đ
         </div>`;
     });
@@ -280,8 +274,9 @@ function resetBXH(){
     }
 }
 
+capNhatBXH();
+
 </script>
 
 </body>
 </html>
-
