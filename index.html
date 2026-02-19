@@ -396,17 +396,16 @@ document.querySelectorAll("input").forEach(input=>{
     });
 });
 
-   function speakWish(name, money){
+  function speakWish(name, money){
 
     let text = "Chúc " + name +
     " năm mới phát tài phát lộc. Bạn nhận được " +
     money.toLocaleString() + " đồng";
 
-    let encodedText = encodeURIComponent(text);
+    let encoded = encodeURIComponent(text);
 
-    let url =
-    "https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=vi&q="
-    + encodedText;
+    // Dùng Voice RSS (miễn phí demo)
+    let url = "https://api.voicerss.org/?key=demo&hl=vi-vn&src=" + encoded;
 
     let audio = document.getElementById("ttsAudio");
 
@@ -414,9 +413,10 @@ document.querySelectorAll("input").forEach(input=>{
     audio.load();
 
     audio.play().catch(e=>{
-        console.log("Lỗi phát âm thanh:", e);
+        console.log("Lỗi:", e);
     });
 }
+
 
 
 
@@ -424,6 +424,7 @@ document.querySelectorAll("input").forEach(input=>{
 
 </body>
 </html>
+
 
 
 
