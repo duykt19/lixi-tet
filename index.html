@@ -2,7 +2,8 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" 
+content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Lì Xì Xuân 2026</title>
 
 <style>
@@ -40,6 +41,7 @@ input{
     border:none;
     margin:8px 0;
     text-align:center;
+    font-size:16px;   /* BẮT BUỘC */
 }
 
 button{
@@ -367,7 +369,16 @@ function createWish(name){
 
     setTimeout(()=>wish.remove(),6000);
 }
+    // FIX IPHONE ZOOM
+document.querySelectorAll("input").forEach(input=>{
+    input.addEventListener("blur", ()=>{
+        window.scrollTo(0,0);
+        document.body.style.zoom = "1";
+    });
+});
+
 </script>
 
 </body>
 </html>
+
