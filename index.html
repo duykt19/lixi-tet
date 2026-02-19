@@ -84,19 +84,33 @@ button:hover{
     transform:translateY(-8px);
 }
 
-.lixi.open{
-    transform:scale(1.2) rotate(8deg);
-    filter:brightness(1.2);
-}
-
 .lixi.fade{
     opacity:0.3;
 }
 
+/* HIỆU ỨNG BUNG */
+@keyframes burst {
+    0% {transform:scale(1);}
+    40% {transform:scale(1.3) rotate(5deg);}
+    60% {transform:scale(0.9) rotate(-5deg);}
+    100% {transform:scale(1.2) rotate(8deg);}
+}
+
+@keyframes glow {
+    0% {box-shadow:0 0 0 rgba(255,215,0,0);}
+    100% {box-shadow:0 0 35px rgba(255,215,0,0.9);}
+}
+
+.lixi.open{
+    animation: burst 0.6s ease-out, glow 0.6s ease-out;
+    filter:brightness(1.2);
+}
+
 .result{
     margin-top:20px;
-    font-size:20px;
+    font-size:22px;
     font-weight:bold;
+    min-height:40px;
 }
 
 /* BẢNG XẾP HẠNG */
@@ -138,9 +152,20 @@ button:hover{
     top:-40px;
     font-size:14px;
     font-weight:600;
-    letter-spacing:0.5px;
     animation:fall linear forwards;
     text-shadow:0 2px 5px rgba(0,0,0,0.4);
+}
+
+/* HIỆU ỨNG TIỀN */
+.coin{
+    position:fixed;
+    font-size:20px;
+    animation:coinFly 1.2s ease-out forwards;
+}
+
+@keyframes coinFly{
+    0%{transform:translateY(0) scale(0.5); opacity:1;}
+    100%{transform:translateY(-160px) scale(1.3); opacity:0;}
 }
 
 /* CẢNH BÁO */
@@ -164,7 +189,6 @@ button:hover{
     <input type="number" id="customMoney" placeholder="Thêm mệnh giá">
     <button onclick="addMoney()">Thêm</button>
     <button onclick="startGame()">Bắt đầu</button>
-
     <div class="money-list" id="moneyDisplay"></div>
 </div>
 
@@ -193,6 +217,18 @@ Không đại diện cho bất kỳ hoạt động tài chính thực tế nào.
 let moneyList=[];
 let rankings=[];
 let hasPlayed=false;
+let musicStarted=false;
+
+/* NHẠC */
+function startMusic(){
+    if(!musicStarted){
+        const audio=document.getElementById("bgMusic");
+        audio.loop=true;
+        audio.volume=0.6;
+        audio.play().catch(()=>{});
+        musicStarted=true;
+    }
+}
 
 function updateMoneyDisplay(){
     document.getElementById("moneyDisplay").innerHTML=
@@ -200,12 +236,12 @@ function updateMoneyDisplay(){
         ? "Mệnh giá hiện có: "+moneyList.map(m=>m.toLocaleString()+"đ").join(" | ")
         : "Chưa có mệnh giá nào";
 }
-
 updateMoneyDisplay();
 
 function addMoney(){
+    startMusic();
     let val=parseInt(document.getElementById("customMoney").value);
-    if(val && val>0){
+    if(!isNaN(val) && val>0){
         moneyList.push(val);
         updateMoneyDisplay();
         document.getElementById("customMoney").value="";
@@ -213,12 +249,12 @@ function addMoney(){
 }
 
 function startGame(){
+    startMusic();
     let name=document.getElementById("playerName").value.trim();
     if(name==="" || moneyList.length===0){
         alert("Nhập tên và thêm ít nhất 1 mệnh giá");
         return;
     }
-
     hasPlayed=false;
     document.getElementById("login").style.display="none";
     document.getElementById("game").style.display="block";
@@ -236,7 +272,6 @@ function createLixi(name){
         div.onclick=function(){
             if(!hasPlayed){
                 pickMoney(name,this);
-                hasPlayed=true;
             }
         };
         container.appendChild(div);
@@ -244,26 +279,45 @@ function createLixi(name){
 }
 
 function pickMoney(name,element){
+    startMusic();
+    hasPlayed=true;
 
-    document.getElementById("bgMusic").play();
-
-    let money=moneyList[Math.floor(Math.random()*moneyList.length)];
-
-    document.querySelectorAll(".lixi").forEach(l=>{
-        l.classList.add("fade");
-    });
-
+    document.querySelectorAll(".lixi").forEach(l=>l.classList.add("fade"));
     element.classList.remove("fade");
     element.classList.add("open");
 
-    document.getElementById("result").innerHTML=
-        name+" nhận được "+money.toLocaleString()+"đ";
+    document.getElementById("result").innerHTML="⏳ Đang mở bao lì xì...";
 
-    rankings.push({name:name, money:money});
-    rankings.sort((a,b)=>b.money-a.money);
-    updateRank();
+    if(navigator.vibrate){
+        navigator.vibrate([100,50,100,200]);
+    }
 
-    createWish(name);
+    setTimeout(()=>{
+        let money=moneyList[Math.floor(Math.random()*moneyList.length)];
+
+        document.getElementById("result").innerHTML=
+            "🎉 "+name+" nhận được <span style='color:gold'>"+
+            money.toLocaleString()+"đ</span>";
+
+        rankings.push({name:name, money:money});
+        rankings.sort((a,b)=>b.money-a.money);
+        updateRank();
+
+        createWish(name);
+        spawnCoins();
+    },1200);
+}
+
+function spawnCoins(){
+    for(let i=0;i<12;i++){
+        let c=document.createElement("div");
+        c.className="coin";
+        c.innerText="💰";
+        c.style.left=(40+Math.random()*20)+"vw";
+        c.style.top="60vh";
+        document.body.appendChild(c);
+        setTimeout(()=>c.remove(),1200);
+    }
 }
 
 function updateRank(){
@@ -280,12 +334,13 @@ function resetRank(){
 }
 
 function playAgain(){
+    hasPlayed=false;
     document.getElementById("playerName").value="";
     document.getElementById("login").style.display="block";
     document.getElementById("game").style.display="none";
 }
 
-/* HOA ĐÀO RƠI */
+/* HOA ĐÀO */
 setInterval(()=>{
     let petal=document.createElement("div");
     petal.className="petal";
@@ -296,7 +351,6 @@ setInterval(()=>{
     setTimeout(()=>petal.remove(),10000);
 },400);
 
-/* LỜI CHÚC RƠI */
 function createWish(name){
     let messages=[
         "Kính chúc "+name+" An Khang Thịnh Vượng",
@@ -317,5 +371,3 @@ function createWish(name){
 
 </body>
 </html>
-
-
