@@ -393,28 +393,28 @@ document.querySelectorAll("input").forEach(input=>{
         document.body.style.zoom = "1";
     });
 });
-function speakWish(name,money){
-    if('speechSynthesis' in window){
 
-        let text="Chúc "+name+
-        " năm mới phát tài phát lộc. Bạn nhận được "+
-        money.toLocaleString()+" đồng";
+    function speakWish(name, money){
 
-        let utter=new SpeechSynthesisUtterance(text);
+    let text = "Chúc " + name +
+    " năm mới phát tài phát lộc. Bạn nhận được " +
+    money.toLocaleString() + " đồng";
 
-        utter.lang="vi-VN";
-        utter.rate=1;
-        utter.pitch=1.1;
-        utter.volume=1;
+    let encodedText = encodeURIComponent(text);
 
-        speechSynthesis.cancel();
-        speechSynthesis.speak(utter);
-    }
+    let audio = new Audio(
+        "https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=vi&q=" 
+        + encodedText
+    );
+
+    audio.play().catch(()=>{});
 }
+
 
 </script>
 
 </body>
 </html>
+
 
 
