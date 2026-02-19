@@ -14,28 +14,22 @@
 }
 
 body{
-    background: linear-gradient(135deg,#7b0000,#d10000);
+    background: linear-gradient(135deg,#8b0000,#d60000);
     min-height:100vh;
+    overflow:hidden;
     color:white;
-    overflow-x:hidden;
 }
 
 /* APP CARD */
 .app{
     max-width:480px;
-    margin:30px auto;
+    margin:25px auto;
     background:rgba(255,255,255,0.08);
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(25px);
     border-radius:30px;
     padding:30px 20px;
-    box-shadow:0 20px 50px rgba(0,0,0,0.4);
+    box-shadow:0 25px 60px rgba(0,0,0,0.5);
     text-align:center;
-}
-
-h1{
-    font-size:24px;
-    margin-bottom:15px;
-    letter-spacing:1px;
 }
 
 /* INPUT */
@@ -46,17 +40,16 @@ input{
     border:none;
     margin:8px 0;
     text-align:center;
-    font-size:14px;
 }
 
 button{
     padding:10px 18px;
     border:none;
     border-radius:12px;
-    margin:8px 5px;
+    margin:6px;
     cursor:pointer;
     font-weight:bold;
-    background:linear-gradient(45deg,#ffd700,#ffcc00);
+    background:linear-gradient(45deg,#ffd700,#ffb700);
     transition:0.3s;
 }
 
@@ -66,8 +59,8 @@ button:hover{
 
 /* DANH SÁCH MỆNH GIÁ */
 .money-list{
-    margin-top:10px;
     font-size:13px;
+    margin-top:10px;
     opacity:0.9;
 }
 
@@ -80,35 +73,26 @@ button:hover{
 }
 
 .lixi{
-    width:70px;
-    height:110px;
-    background:linear-gradient(180deg,#ffcc00,#ff9900);
-    border-radius:15px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:30px;
+    width:75px;
+    height:120px;
+    background:url('lixi.png') center/cover no-repeat;
     cursor:pointer;
     transition:0.4s;
-    box-shadow:0 10px 20px rgba(0,0,0,0.3);
 }
 
 .lixi:hover{
-    transform:translateY(-10px);
+    transform:translateY(-8px);
 }
 
-/* Khi được chọn */
 .lixi.open{
     transform:scale(1.2) rotate(8deg);
-    background:linear-gradient(180deg,#fff,#ffd700);
+    filter:brightness(1.2);
 }
 
-/* Những cái không chọn */
 .lixi.fade{
     opacity:0.3;
 }
 
-/* RESULT */
 .result{
     margin-top:20px;
     font-size:20px;
@@ -117,14 +101,15 @@ button:hover{
 
 /* BẢNG XẾP HẠNG */
 .rank{
-    margin-top:30px;
+    margin-top:25px;
     text-align:left;
     font-size:14px;
+    max-height:150px;
+    overflow:auto;
 }
 
 .rank h3{
     text-align:center;
-    margin-bottom:10px;
 }
 
 .rank li{
@@ -132,29 +117,38 @@ button:hover{
     border-bottom:1px solid rgba(255,255,255,0.2);
 }
 
-/* LỜI CHÚC RƠI */
-.wish{
+/* HOA ĐÀO */
+.petal{
     position:fixed;
-    top:-40px;
-    font-size:14px;
-    font-weight:500;
-    opacity:0.9;
+    top:-20px;
+    font-size:20px;
     animation:fall linear forwards;
 }
 
 @keyframes fall{
     to{
-        transform:translateY(110vh);
+        transform:translateY(110vh) rotate(360deg);
         opacity:0;
     }
 }
 
+/* LỜI CHÚC */
+.wish{
+    position:fixed;
+    top:-40px;
+    font-size:14px;
+    font-weight:600;
+    letter-spacing:0.5px;
+    animation:fall linear forwards;
+    text-shadow:0 2px 5px rgba(0,0,0,0.4);
+}
+
 /* CẢNH BÁO */
 .disclaimer{
-    margin-top:25px;
+    margin-top:15px;
     font-size:12px;
     opacity:0.7;
-    line-height:1.6;
+    line-height:1.5;
 }
 </style>
 </head>
@@ -163,11 +157,11 @@ button:hover{
 
 <div class="app">
 
-<h1>🧧 LÌ XÌ XUÂN 2026</h1>
+<h2>🧧 LÌ XÌ XUÂN 2026</h2>
 
 <div id="login">
     <input type="text" id="playerName" placeholder="Nhập tên người chơi">
-    <input type="number" id="customMoney" placeholder="Thêm mệnh giá (vd 30000)">
+    <input type="number" id="customMoney" placeholder="Thêm mệnh giá">
     <button onclick="addMoney()">Thêm</button>
     <button onclick="startGame()">Bắt đầu</button>
 
@@ -183,12 +177,12 @@ button:hover{
 <div class="rank">
     <h3>🏆 Bảng Xếp Hạng</h3>
     <ul id="rankList"></ul>
+    <button onclick="resetRank()">Reset BXH</button>
 </div>
 
 <div class="disclaimer">
-Ứng dụng được phát triển nhằm mục đích giải trí và trải nghiệm tương tác.
-Không đại diện cho bất kỳ hình thức giao dịch tài chính hoặc cá cược thực tế.
-Người sử dụng có trách nhiệm tuân thủ quy định pháp luật hiện hành.
+Ứng dụng được phát triển nhằm mục đích giải trí.
+Không đại diện cho bất kỳ hoạt động tài chính thực tế nào.
 </div>
 
 </div>
@@ -196,12 +190,15 @@ Người sử dụng có trách nhiệm tuân thủ quy định pháp luật hi�
 <audio id="bgMusic" src="kk.mp3"></audio>
 
 <script>
-let moneyList=[1000];
+let moneyList=[];
 let rankings=[];
+let hasPlayed=false;
 
 function updateMoneyDisplay(){
     document.getElementById("moneyDisplay").innerHTML=
-        "Mệnh giá hiện có: "+moneyList.map(m=>m.toLocaleString()+"đ").join(" | ");
+        moneyList.length>0
+        ? "Mệnh giá hiện có: "+moneyList.map(m=>m.toLocaleString()+"đ").join(" | ")
+        : "Chưa có mệnh giá nào";
 }
 
 updateMoneyDisplay();
@@ -217,8 +214,12 @@ function addMoney(){
 
 function startGame(){
     let name=document.getElementById("playerName").value.trim();
-    if(name===""){ alert("Nhập tên trước"); return; }
+    if(name==="" || moneyList.length===0){
+        alert("Nhập tên và thêm ít nhất 1 mệnh giá");
+        return;
+    }
 
+    hasPlayed=false;
     document.getElementById("login").style.display="none";
     document.getElementById("game").style.display="block";
     createLixi(name);
@@ -232,9 +233,11 @@ function createLixi(name){
     for(let i=0;i<5;i++){
         let div=document.createElement("div");
         div.className="lixi";
-        div.innerText="🧧";
         div.onclick=function(){
-            pickMoney(name,this);
+            if(!hasPlayed){
+                pickMoney(name,this);
+                hasPlayed=true;
+            }
         };
         container.appendChild(div);
     }
@@ -271,31 +274,46 @@ function updateRank(){
     });
 }
 
+function resetRank(){
+    rankings=[];
+    updateRank();
+}
+
 function playAgain(){
     document.getElementById("playerName").value="";
     document.getElementById("login").style.display="block";
     document.getElementById("game").style.display="none";
 }
 
+/* HOA ĐÀO RƠI */
+setInterval(()=>{
+    let petal=document.createElement("div");
+    petal.className="petal";
+    petal.innerText="🌸";
+    petal.style.left=Math.random()*100+"vw";
+    petal.style.animationDuration=(5+Math.random()*5)+"s";
+    document.body.appendChild(petal);
+    setTimeout(()=>petal.remove(),10000);
+},400);
+
+/* LỜI CHÚC RƠI */
 function createWish(name){
     let messages=[
-        "Chúc "+name+" An Khang Thịnh Vượng",
-        "Chúc "+name+" Vạn Sự Như Ý",
-        "Chúc "+name+" Tài Lộc Sung Túc",
-        "Chúc "+name+" Thành Công Rực Rỡ"
+        "Kính chúc "+name+" An Khang Thịnh Vượng",
+        "Kính chúc "+name+" Vạn Sự Như Ý",
+        "Kính chúc "+name+" Tài Lộc Viên Mãn"
     ];
 
     let wish=document.createElement("div");
     wish.className="wish";
     wish.innerText=messages[Math.floor(Math.random()*messages.length)];
-    wish.style.left=Math.random()*90+"vw";
-    wish.style.animationDuration=(4+Math.random()*4)+"s";
+    wish.style.left=Math.random()*80+"vw";
+    wish.style.animationDuration="6s";
     document.body.appendChild(wish);
 
-    setTimeout(()=>wish.remove(),8000);
+    setTimeout(()=>wish.remove(),6000);
 }
 </script>
 
 </body>
 </html>
-
