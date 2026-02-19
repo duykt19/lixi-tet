@@ -14,86 +14,112 @@
 }
 
 body{
-    background: linear-gradient(135deg,#b30000,#ff4d4d);
+    background: linear-gradient(135deg,#7b0000,#d10000);
+    min-height:100vh;
     color:white;
     overflow-x:hidden;
-    min-height:100vh;
-    text-align:center;
 }
 
-/* APP CONTAINER */
+/* APP CARD */
 .app{
-    max-width:500px;
+    max-width:480px;
     margin:30px auto;
-    background:rgba(255,255,255,0.1);
-    backdrop-filter: blur(10px);
-    border-radius:25px;
-    padding:25px;
-    box-shadow:0 15px 40px rgba(0,0,0,0.4);
+    background:rgba(255,255,255,0.08);
+    backdrop-filter: blur(20px);
+    border-radius:30px;
+    padding:30px 20px;
+    box-shadow:0 20px 50px rgba(0,0,0,0.4);
+    text-align:center;
 }
 
 h1{
+    font-size:24px;
     margin-bottom:15px;
+    letter-spacing:1px;
 }
 
+/* INPUT */
 input{
-    padding:10px;
-    width:80%;
-    border-radius:10px;
+    width:90%;
+    padding:12px;
+    border-radius:12px;
     border:none;
     margin:8px 0;
     text-align:center;
+    font-size:14px;
 }
 
 button{
-    padding:10px 20px;
+    padding:10px 18px;
     border:none;
-    border-radius:10px;
-    margin:8px;
+    border-radius:12px;
+    margin:8px 5px;
     cursor:pointer;
-    background:#ffd700;
     font-weight:bold;
+    background:linear-gradient(45deg,#ffd700,#ffcc00);
+    transition:0.3s;
 }
 
 button:hover{
     transform:scale(1.05);
 }
 
+/* DANH SÁCH MỆNH GIÁ */
+.money-list{
+    margin-top:10px;
+    font-size:13px;
+    opacity:0.9;
+}
+
 /* LÌ XÌ */
 .lixi-container{
     display:flex;
     justify-content:center;
-    gap:10px;
-    margin-top:20px;
+    gap:15px;
+    margin-top:25px;
 }
 
 .lixi{
     width:70px;
-    height:100px;
-    background:gold;
-    border-radius:12px;
+    height:110px;
+    background:linear-gradient(180deg,#ffcc00,#ff9900);
+    border-radius:15px;
     display:flex;
     align-items:center;
     justify-content:center;
+    font-size:30px;
     cursor:pointer;
-    font-weight:bold;
-    color:#b30000;
-    transition:0.3s;
+    transition:0.4s;
+    box-shadow:0 10px 20px rgba(0,0,0,0.3);
 }
 
 .lixi:hover{
     transform:translateY(-10px);
 }
 
+/* Khi được chọn */
+.lixi.open{
+    transform:scale(1.2) rotate(8deg);
+    background:linear-gradient(180deg,#fff,#ffd700);
+}
+
+/* Những cái không chọn */
+.lixi.fade{
+    opacity:0.3;
+}
+
+/* RESULT */
 .result{
-    font-size:22px;
-    margin-top:15px;
+    margin-top:20px;
+    font-size:20px;
+    font-weight:bold;
 }
 
 /* BẢNG XẾP HẠNG */
 .rank{
     margin-top:30px;
     text-align:left;
+    font-size:14px;
 }
 
 .rank h3{
@@ -101,43 +127,34 @@ button:hover{
     margin-bottom:10px;
 }
 
-.rank ul{
-    list-style:none;
-}
-
 .rank li{
-    padding:5px 0;
+    padding:6px 0;
     border-bottom:1px solid rgba(255,255,255,0.2);
 }
 
-/* HOA ĐÀO */
-.fall{
+/* LỜI CHÚC RƠI */
+.wish{
     position:fixed;
-    top:-50px;
-    font-size:20px;
-    animation:fall linear infinite;
+    top:-40px;
+    font-size:14px;
+    font-weight:500;
+    opacity:0.9;
+    animation:fall linear forwards;
 }
 
 @keyframes fall{
     to{
-        transform:translateY(110vh) rotate(360deg);
+        transform:translateY(110vh);
+        opacity:0;
     }
-}
-
-/* LỜI CHÚC */
-.wish{
-    position:fixed;
-    top:-50px;
-    font-size:14px;
-    color:#fff;
-    animation:fall linear infinite;
 }
 
 /* CẢNH BÁO */
 .disclaimer{
-    margin-top:30px;
+    margin-top:25px;
     font-size:12px;
-    opacity:0.8;
+    opacity:0.7;
+    line-height:1.6;
 }
 </style>
 </head>
@@ -146,21 +163,21 @@ button:hover{
 
 <div class="app">
 
-<h1>🧧 Bốc Lì Xì Xuân 2026</h1>
+<h1>🧧 LÌ XÌ XUÂN 2026</h1>
 
 <div id="login">
-    <input type="text" id="playerName" placeholder="Nhập tên của bạn">
-    <br>
-    <input type="number" id="customMoney" placeholder="Thêm mệnh giá (vd: 30000)">
-    <br>
-    <button onclick="addMoney()">Thêm Mệnh Giá</button>
-    <button onclick="startGame()">Bắt Đầu</button>
+    <input type="text" id="playerName" placeholder="Nhập tên người chơi">
+    <input type="number" id="customMoney" placeholder="Thêm mệnh giá (vd 30000)">
+    <button onclick="addMoney()">Thêm</button>
+    <button onclick="startGame()">Bắt đầu</button>
+
+    <div class="money-list" id="moneyDisplay"></div>
 </div>
 
 <div id="game" style="display:none;">
     <div class="lixi-container" id="lixiContainer"></div>
     <div class="result" id="result"></div>
-    <button onclick="playAgain()">Chơi Lại</button>
+    <button onclick="playAgain()">Chơi lại</button>
 </div>
 
 <div class="rank">
@@ -170,7 +187,7 @@ button:hover{
 
 <div class="disclaimer">
 Ứng dụng được phát triển nhằm mục đích giải trí và trải nghiệm tương tác.
-Không đại diện cho bất kỳ hình thức cá cược hoặc giao dịch tài chính thực tế nào.
+Không đại diện cho bất kỳ hình thức giao dịch tài chính hoặc cá cược thực tế.
 Người sử dụng có trách nhiệm tuân thủ quy định pháp luật hiện hành.
 </div>
 
@@ -182,24 +199,28 @@ Người sử dụng có trách nhiệm tuân thủ quy định pháp luật hi�
 let moneyList=[10000,20000,50000,100000,200000,500000];
 let rankings=[];
 
+function updateMoneyDisplay(){
+    document.getElementById("moneyDisplay").innerHTML=
+        "Mệnh giá hiện có: "+moneyList.map(m=>m.toLocaleString()+"đ").join(" | ");
+}
+
+updateMoneyDisplay();
+
 function addMoney(){
     let val=parseInt(document.getElementById("customMoney").value);
     if(val && val>0){
         moneyList.push(val);
-        alert("Đã thêm "+val+"đ");
+        updateMoneyDisplay();
+        document.getElementById("customMoney").value="";
     }
 }
 
 function startGame(){
     let name=document.getElementById("playerName").value.trim();
-    if(name===""){
-        alert("Nhập tên trước!");
-        return;
-    }
+    if(name===""){ alert("Nhập tên trước"); return; }
 
     document.getElementById("login").style.display="none";
     document.getElementById("game").style.display="block";
-
     createLixi(name);
 }
 
@@ -213,25 +234,33 @@ function createLixi(name){
         div.className="lixi";
         div.innerText="🧧";
         div.onclick=function(){
-            pickMoney(name);
+            pickMoney(name,this);
         };
         container.appendChild(div);
     }
 }
 
-function pickMoney(name){
-    let money=moneyList[Math.floor(Math.random()*moneyList.length)];
+function pickMoney(name,element){
 
     document.getElementById("bgMusic").play();
 
+    let money=moneyList[Math.floor(Math.random()*moneyList.length)];
+
+    document.querySelectorAll(".lixi").forEach(l=>{
+        l.classList.add("fade");
+    });
+
+    element.classList.remove("fade");
+    element.classList.add("open");
+
     document.getElementById("result").innerHTML=
-        "🎉 "+name+" nhận được "+money.toLocaleString()+"đ";
+        name+" nhận được "+money.toLocaleString()+"đ";
 
     rankings.push({name:name, money:money});
     rankings.sort((a,b)=>b.money-a.money);
     updateRank();
 
-    document.getElementById("lixiContainer").innerHTML="";
+    createWish(name);
 }
 
 function updateRank(){
@@ -247,32 +276,24 @@ function playAgain(){
     document.getElementById("login").style.display="block";
     document.getElementById("game").style.display="none";
 }
-</script>
 
-<script>
-/* HOA ĐÀO RƠI */
-setInterval(()=>{
-    let hoa=document.createElement("div");
-    hoa.className="fall";
-    hoa.innerText="🌸";
-    hoa.style.left=Math.random()*100+"vw";
-    hoa.style.animationDuration=(3+Math.random()*5)+"s";
-    document.body.appendChild(hoa);
-    setTimeout(()=>hoa.remove(),8000);
-},300);
+function createWish(name){
+    let messages=[
+        "Chúc "+name+" An Khang Thịnh Vượng",
+        "Chúc "+name+" Vạn Sự Như Ý",
+        "Chúc "+name+" Tài Lộc Sung Túc",
+        "Chúc "+name+" Thành Công Rực Rỡ"
+    ];
 
-/* LỜI CHÚC RƠI */
-const wishes=["Chúc Mừng Năm Mới 🎊","An Khang Thịnh Vượng","Vạn Sự Như Ý","Tài Lộc Đầy Nhà","Phát Tài Phát Lộc"];
-
-setInterval(()=>{
     let wish=document.createElement("div");
     wish.className="wish";
-    wish.innerText=wishes[Math.floor(Math.random()*wishes.length)];
-    wish.style.left=Math.random()*100+"vw";
-    wish.style.animationDuration=(4+Math.random()*5)+"s";
+    wish.innerText=messages[Math.floor(Math.random()*messages.length)];
+    wish.style.left=Math.random()*90+"vw";
+    wish.style.animationDuration=(4+Math.random()*4)+"s";
     document.body.appendChild(wish);
-    setTimeout(()=>wish.remove(),9000);
-},1500);
+
+    setTimeout(()=>wish.remove(),8000);
+}
 </script>
 
 </body>
