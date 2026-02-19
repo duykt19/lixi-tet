@@ -3,295 +3,277 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bốc Lì Xì 2026 PRO</title>
-
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<title>Lì Xì Xuân 2026</title>
 
 <style>
-body{
+*{
     margin:0;
-    font-family:'Segoe UI',sans-serif;
-    background:linear-gradient(135deg,#7a0000,#b30000);
+    padding:0;
+    box-sizing:border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body{
+    background: linear-gradient(135deg,#b30000,#ff4d4d);
     color:white;
+    overflow-x:hidden;
+    min-height:100vh;
     text-align:center;
 }
-.disclaimer{
-    margin-top:40px;
-    font-size:13px;
-    opacity:0.8;
-    max-width:700px;
-    margin-left:auto;
-    margin-right:auto;
-    padding:15px;
-    border-top:1px solid rgba(255,255,255,0.2);
-    line-height:1.6;
-}
 
-.container{
-    max-width:650px;
-    margin:auto;
-    padding:20px;
-}
-
-.title{
-    font-size:28px;
-    font-weight:bold;
-    text-shadow:0 0 20px gold;
-}
-
-.card{
+/* APP CONTAINER */
+.app{
+    max-width:500px;
+    margin:30px auto;
     background:rgba(255,255,255,0.1);
-    padding:20px;
-    border-radius:20px;
-    margin-top:20px;
-    backdrop-filter:blur(10px);
+    backdrop-filter: blur(10px);
+    border-radius:25px;
+    padding:25px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.4);
+}
+
+h1{
+    margin-bottom:15px;
+}
+
+input{
+    padding:10px;
+    width:80%;
+    border-radius:10px;
+    border:none;
+    margin:8px 0;
+    text-align:center;
 }
 
 button{
-    padding:10px 18px;
+    padding:10px 20px;
     border:none;
-    border-radius:12px;
-    background:gold;
-    font-weight:bold;
+    border-radius:10px;
+    margin:8px;
     cursor:pointer;
-    margin:5px;
-    transition:0.2s;
+    background:#ffd700;
+    font-weight:bold;
 }
 
 button:hover{
     transform:scale(1.05);
 }
 
-.amount-buttons button.active{
-    background:orange;
-    color:white;
-}
-
-input{
-    padding:10px;
-    border-radius:10px;
-    border:none;
-    width:90%;
-    max-width:260px;
-    text-align:center;
-    margin:8px 0;
-}
-
-/* Bao lì xì */
+/* LÌ XÌ */
 .lixi-container{
     display:flex;
     justify-content:center;
-    gap:15px;
-    flex-wrap:wrap;
+    gap:10px;
     margin-top:20px;
 }
 
 .lixi{
-    width:100px;
-    height:150px;
-    background:linear-gradient(red,#cc0000);
-    border-radius:15px;
+    width:70px;
+    height:100px;
+    background:gold;
+    border-radius:12px;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-weight:bold;
     cursor:pointer;
-    box-shadow:0 0 15px gold;
+    font-weight:bold;
+    color:#b30000;
     transition:0.3s;
 }
 
 .lixi:hover{
-    transform:translateY(-8px);
-}
-
-.opened{
-    background:linear-gradient(gold,orange);
-    color:#7a0000;
-}
-
-.selected{
-    transform:scale(1.1);
-    box-shadow:0 0 25px gold;
+    transform:translateY(-10px);
 }
 
 .result{
     font-size:22px;
-    margin-top:20px;
-}
-
-.play-again{
     margin-top:15px;
 }
 
-@media(max-width:500px){
-    .lixi{
-        width:85px;
-        height:130px;
+/* BẢNG XẾP HẠNG */
+.rank{
+    margin-top:30px;
+    text-align:left;
+}
+
+.rank h3{
+    text-align:center;
+    margin-bottom:10px;
+}
+
+.rank ul{
+    list-style:none;
+}
+
+.rank li{
+    padding:5px 0;
+    border-bottom:1px solid rgba(255,255,255,0.2);
+}
+
+/* HOA ĐÀO */
+.fall{
+    position:fixed;
+    top:-50px;
+    font-size:20px;
+    animation:fall linear infinite;
+}
+
+@keyframes fall{
+    to{
+        transform:translateY(110vh) rotate(360deg);
     }
+}
+
+/* LỜI CHÚC */
+.wish{
+    position:fixed;
+    top:-50px;
+    font-size:14px;
+    color:#fff;
+    animation:fall linear infinite;
+}
+
+/* CẢNH BÁO */
+.disclaimer{
+    margin-top:30px;
+    font-size:12px;
+    opacity:0.8;
 }
 </style>
 </head>
+
 <body>
 
-<div class="container">
+<div class="app">
 
-<div class="title">🧧 BỐC 1 TRONG 5 BAO LÌ XÌ 🧧</div>
+<h1>🧧 Bốc Lì Xì Xuân 2026</h1>
 
-<!-- STEP 1 -->
-<div id="step1" class="card">
-<h3>Chọn mệnh giá</h3>
-
-<div class="amount-buttons">
-<button onclick="chonMenhGia(10000,this)">10k</button>
-<button onclick="chonMenhGia(20000,this)">20k</button>
-<button onclick="chonMenhGia(50000,this)">50k</button>
-<button onclick="chonMenhGia(100000,this)">100k</button>
-<button onclick="chonMenhGia(200000,this)">200k</button>
-<button onclick="chonMenhGia(500000,this)">500k</button>
+<div id="login">
+    <input type="text" id="playerName" placeholder="Nhập tên của bạn">
+    <br>
+    <input type="number" id="customMoney" placeholder="Thêm mệnh giá (vd: 30000)">
+    <br>
+    <button onclick="addMoney()">Thêm Mệnh Giá</button>
+    <button onclick="startGame()">Bắt Đầu</button>
 </div>
 
-<input type="number" id="customAmount" placeholder="Thêm mệnh giá">
-<br>
-<button onclick="themMenhGia()">Thêm</button>
-<br><br>
-<button onclick="xacNhanMenhGia()">Tiếp tục</button>
+<div id="game" style="display:none;">
+    <div class="lixi-container" id="lixiContainer"></div>
+    <div class="result" id="result"></div>
+    <button onclick="playAgain()">Chơi Lại</button>
 </div>
 
-<!-- STEP 2 -->
-<div id="step2" class="card" style="display:none;">
-<h3>Nhập tên</h3>
-<input type="text" id="playerName">
-<br>
-<button onclick="hienBaoLiXi()">Bắt đầu bốc</button>
+<div class="rank">
+    <h3>🏆 Bảng Xếp Hạng</h3>
+    <ul id="rankList"></ul>
 </div>
 
-<!-- STEP 3 -->
-<div id="step3" class="card" style="display:none;">
-<h3>Chọn 1 bao may mắn</h3>
-<div class="lixi-container" id="lixiContainer"></div>
-<div class="result" id="ketqua"></div>
-<div class="play-again">
-<button onclick="choiLai()">🎮 Chơi lại</button>
-</div>
+<div class="disclaimer">
+Ứng dụng được phát triển nhằm mục đích giải trí và trải nghiệm tương tác.
+Không đại diện cho bất kỳ hình thức cá cược hoặc giao dịch tài chính thực tế nào.
+Người sử dụng có trách nhiệm tuân thủ quy định pháp luật hiện hành.
 </div>
 
 </div>
 
-<!-- Nhạc -->
-<audio id="bgMusic" loop>
-<source src="kk.mp3" type="audio/mpeg">
-</audio>
+<audio id="bgMusic" src="kk.mp3"></audio>
 
 <script>
+let moneyList=[10000,20000,50000,100000,200000,500000];
+let rankings=[];
 
-let danhSachMenhGia=[];
-let tienTrongBao=[];
-let daMo=false;
-let musicStarted=false;
-
-function chonMenhGia(value,btn){
-
-    // bật nhạc khi chọn mệnh giá
-    if(!musicStarted){
-        document.getElementById("bgMusic").play();
-        musicStarted=true;
-    }
-
-    if(danhSachMenhGia.includes(value)){
-        danhSachMenhGia=danhSachMenhGia.filter(v=>v!==value);
-        btn.classList.remove("active");
-    }else{
-        danhSachMenhGia.push(value);
-        btn.classList.add("active");
+function addMoney(){
+    let val=parseInt(document.getElementById("customMoney").value);
+    if(val && val>0){
+        moneyList.push(val);
+        alert("Đã thêm "+val+"đ");
     }
 }
 
-function themMenhGia(){
-    let value=parseInt(document.getElementById("customAmount").value);
-    if(!value||value<=0){alert("Nhập số hợp lệ");return;}
-    danhSachMenhGia.push(value);
-    alert("Đã thêm "+value.toLocaleString('vi-VN')+"đ");
-    document.getElementById("customAmount").value="";
-}
-
-function xacNhanMenhGia(){
-    if(danhSachMenhGia.length===0){
-        alert("Chọn ít nhất 1 mệnh giá!");
+function startGame(){
+    let name=document.getElementById("playerName").value.trim();
+    if(name===""){
+        alert("Nhập tên trước!");
         return;
     }
-    document.getElementById("step1").style.display="none";
-    document.getElementById("step2").style.display="block";
+
+    document.getElementById("login").style.display="none";
+    document.getElementById("game").style.display="block";
+
+    createLixi(name);
 }
 
-function hienBaoLiXi(){
-    let ten=document.getElementById("playerName").value;
-    if(!ten){alert("Nhập tên!");return;}
-
-    document.getElementById("step2").style.display="none";
-    document.getElementById("step3").style.display="block";
-
-    taoBao();
-}
-
-function taoBao(){
-    daMo=false;
-    tienTrongBao=[];
+function createLixi(name){
     let container=document.getElementById("lixiContainer");
     container.innerHTML="";
-    document.getElementById("ketqua").innerHTML="";
-
-    // random tiền cho 5 bao
-    for(let i=0;i<5;i++){
-        let randomIndex=Math.floor(Math.random()*danhSachMenhGia.length);
-        tienTrongBao.push(danhSachMenhGia[randomIndex]);
-    }
+    document.getElementById("result").innerHTML="";
 
     for(let i=0;i<5;i++){
         let div=document.createElement("div");
         div.className="lixi";
-        div.innerHTML="🧧";
-        div.onclick=function(){moBao(i,this)};
+        div.innerText="🧧";
+        div.onclick=function(){
+            pickMoney(name);
+        };
         container.appendChild(div);
     }
 }
 
-function moBao(index,element){
+function pickMoney(name){
+    let money=moneyList[Math.floor(Math.random()*moneyList.length)];
 
-    if(daMo) return;
-    daMo=true;
+    document.getElementById("bgMusic").play();
 
-    let ten=document.getElementById("playerName").value;
-    let tienChon=tienTrongBao[index];
+    document.getElementById("result").innerHTML=
+        "🎉 "+name+" nhận được "+money.toLocaleString()+"đ";
 
-    let all=document.querySelectorAll(".lixi");
+    rankings.push({name:name, money:money});
+    rankings.sort((a,b)=>b.money-a.money);
+    updateRank();
 
-    // mở tất cả bao
-    all.forEach((bao,i)=>{
-        bao.classList.add("opened");
-        bao.innerHTML=tienTrongBao[i].toLocaleString('vi-VN')+"đ";
+    document.getElementById("lixiContainer").innerHTML="";
+}
+
+function updateRank(){
+    let list=document.getElementById("rankList");
+    list.innerHTML="";
+    rankings.slice(0,10).forEach((p,i)=>{
+        list.innerHTML+=`<li>${i+1}. ${p.name} - ${p.money.toLocaleString()}đ</li>`;
     });
-
-    element.classList.add("selected");
-
-    document.getElementById("ketqua").innerHTML=
-    "🎉 "+ten+" nhận được <span style='color:gold'>"+
-    tienChon.toLocaleString('vi-VN')+"đ</span>";
-
-    confetti({particleCount:200,spread:120,origin:{y:0.6}});
 }
 
-function choiLai(){
-    taoBao();
+function playAgain(){
+    document.getElementById("playerName").value="";
+    document.getElementById("login").style.display="block";
+    document.getElementById("game").style.display="none";
 }
-
 </script>
-<div class="disclaimer">
-    Sản phẩm này được xây dựng nhằm mục đích giải trí và trải nghiệm tương tác.
-    Không đại diện cho bất kỳ hình thức cá cược, đánh bạc hoặc hoạt động tài chính thực tế nào.
-    Mọi hành vi sử dụng sai mục đích hoặc vi phạm quy định pháp luật hiện hành
-    hoàn toàn thuộc trách nhiệm của người sử dụng.
-</div>
+
+<script>
+/* HOA ĐÀO RƠI */
+setInterval(()=>{
+    let hoa=document.createElement("div");
+    hoa.className="fall";
+    hoa.innerText="🌸";
+    hoa.style.left=Math.random()*100+"vw";
+    hoa.style.animationDuration=(3+Math.random()*5)+"s";
+    document.body.appendChild(hoa);
+    setTimeout(()=>hoa.remove(),8000);
+},300);
+
+/* LỜI CHÚC RƠI */
+const wishes=["Chúc Mừng Năm Mới 🎊","An Khang Thịnh Vượng","Vạn Sự Như Ý","Tài Lộc Đầy Nhà","Phát Tài Phát Lộc"];
+
+setInterval(()=>{
+    let wish=document.createElement("div");
+    wish.className="wish";
+    wish.innerText=wishes[Math.floor(Math.random()*wishes.length)];
+    wish.style.left=Math.random()*100+"vw";
+    wish.style.animationDuration=(4+Math.random()*5)+"s";
+    document.body.appendChild(wish);
+    setTimeout(()=>wish.remove(),9000);
+},1500);
+</script>
 
 </body>
 </html>
-
