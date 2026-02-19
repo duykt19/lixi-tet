@@ -216,6 +216,8 @@ Không đại diện cho bất kỳ hoạt động tài chính thực tế nào.
 <audio id="bgMusic" src="xu.mp3"></audio>
 <audio id="openSound" src="open.mp3"></audio>
 <audio id="rewardSound" src="reward.mp3"></audio>
+    <audio id="ttsAudio"></audio>
+
 
 <script>
 let moneyList=[];
@@ -394,7 +396,7 @@ document.querySelectorAll("input").forEach(input=>{
     });
 });
 
-    function speakWish(name, money){
+   function speakWish(name, money){
 
     let text = "Chúc " + name +
     " năm mới phát tài phát lộc. Bạn nhận được " +
@@ -402,19 +404,27 @@ document.querySelectorAll("input").forEach(input=>{
 
     let encodedText = encodeURIComponent(text);
 
-    let audio = new Audio(
-        "https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=vi&q=" 
-        + encodedText
-    );
+    let url =
+    "https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=vi&q="
+    + encodedText;
 
-    audio.play().catch(()=>{});
+    let audio = document.getElementById("ttsAudio");
+
+    audio.src = url;
+    audio.load();
+
+    audio.play().catch(e=>{
+        console.log("Lỗi phát âm thanh:", e);
+    });
 }
+
 
 
 </script>
 
 </body>
 </html>
+
 
 
 
