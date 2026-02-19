@@ -214,6 +214,8 @@ Không đại diện cho bất kỳ hoạt động tài chính thực tế nào.
 </div>
 
 <audio id="bgMusic" src="xu.mp3"></audio>
+<audio id="openSound" src="open.mp3"></audio>
+<audio id="rewardSound" src="reward.mp3"></audio>
 
 <script>
 let moneyList=[];
@@ -284,6 +286,13 @@ function pickMoney(name,element){
     startMusic();
     hasPlayed=true;
 
+    const openSound=document.getElementById("openSound");
+    const rewardSound=document.getElementById("rewardSound");
+
+    // phát tiếng mở bao
+    openSound.currentTime=0;
+    openSound.play().catch(()=>{});
+
     document.querySelectorAll(".lixi").forEach(l=>l.classList.add("fade"));
     element.classList.remove("fade");
     element.classList.add("open");
@@ -297,6 +306,10 @@ function pickMoney(name,element){
     setTimeout(()=>{
         let money=moneyList[Math.floor(Math.random()*moneyList.length)];
 
+        // phát tiếng thưởng
+        rewardSound.currentTime=0;
+        rewardSound.play().catch(()=>{});
+
         document.getElementById("result").innerHTML=
             "🎉 "+name+" nhận được <span style='color:gold'>"+
             money.toLocaleString()+"đ</span>";
@@ -307,6 +320,10 @@ function pickMoney(name,element){
 
         createWish(name);
         spawnCoins();
+
+        // 🎤 GIỌNG ĐỌC
+        speakWish(name,money);
+
     },1200);
 }
 
@@ -376,9 +393,28 @@ document.querySelectorAll("input").forEach(input=>{
         document.body.style.zoom = "1";
     });
 });
+function speakWish(name,money){
+    if('speechSynthesis' in window){
+
+        let text="Chúc "+name+
+        " năm mới phát tài phát lộc. Bạn nhận được "+
+        money.toLocaleString()+" đồng";
+
+        let utter=new SpeechSynthesisUtterance(text);
+
+        utter.lang="vi-VN";
+        utter.rate=1;
+        utter.pitch=1.1;
+        utter.volume=1;
+
+        speechSynthesis.cancel();
+        speechSynthesis.speak(utter);
+    }
+}
 
 </script>
 
 </body>
 </html>
+
 
